@@ -3,8 +3,20 @@
 <!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
 
-<h1>Hello Gin 2!</h1>
+<h1>Welcome to the home page!</h1>
 <div id="dynamic"></div>
+<form action="/lobby/">
+    <label for="question">Question:</label><br>
+    <input type="text" id="question" name="question"><br>
+    <label for="first-opt">First Option:</label><br>
+    <input type="text" id="first-opt" name="first-opt"><br>
+    <label for="second-opt">Second Option:</label><br>
+    <input type="text" id="second-opt" name="second-opt"><br>
+
+    <input type="submit" value="Submit" />
+</form>
+
 <script src="assets/js/index.js"></script>
+
 <!--Embed the footer.html template at this location-->
 {{ template "footer.html" .}}

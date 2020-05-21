@@ -1,0 +1,16 @@
+<!--lobby.html-->
+
+<!--Embed the header.html template at this location-->
+{{ template "header.html" .}}
+
+<h1>This is a lobby!</h1>
+<h1>{{ .lobby }}</h1>
+<h1>{{ .id }}</h1>
+<h1>{{ .question }}</h1>
+<h1>{{ .firstOpt }}</h1>
+<h1>{{ .secondOpt }}</h1>
+
+<div id="dynamic"></div>
+<script src="assets/js/lobby.js"></script>
+<!--Embed the footer.html template at this location-->
+{{ template "footer.html" .}}
