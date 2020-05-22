@@ -5,10 +5,14 @@
 
 <h1>This is a lobby!</h1>
 <h1>{{ .lobby }}</h1>
-<h1>{{ .id }}</h1>
-<h1>{{ .question }}</h1>
-<h1>{{ .firstOpt }}</h1>
-<h1>{{ .secondOpt }}</h1>
+<h1>Id: {{ .id }}</h1>
+<h1>Question: {{ .question }}</h1>
+<h1>First: {{ .firstOpt }}</h1>
+<h1>Second: {{ .secondOpt }}</h1>
+
+<p>Clicker QR Code:</p>
+<a href={{ printf "/clicker/?lobbyId=%s" .id }}>Click on here for now!</a>
+
 
 <div id="dynamic"></div>
 <script src="assets/js/lobby.js"></script>

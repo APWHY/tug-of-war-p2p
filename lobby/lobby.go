@@ -3,6 +3,7 @@ package lobby
 import (
 	petname "github.com/dustinkirkland/golang-petname"
 	uuid "github.com/satori/go.uuid"
+	"gitlab.bcgdv.io/syd/tug-of-war/lobby/websockets"
 
 	"strings"
 )
@@ -20,10 +21,17 @@ type Question struct {
 	Right    string
 }
 
+// Participant is a struct wrapping each individual player in a tug of war lobby
+type Participant struct {
+	ID      uuid.UUID
+	Name    string
+	handler websockets.ParticipantWsHandler
+}
+
 // A Lobby is the representation of a single 'game' of tug of war
 type Lobby struct {
 	ID           uuid.UUID
-	Participants map[string]int
+	Participants map[string]Participant
 	Count        Count
 	Question     Question
 }
@@ -32,7 +40,7 @@ type Lobby struct {
 func CreateLobby(question string, leftOption string, rightOption string) *Lobby {
 	return &Lobby{
 		ID:           uuid.NewV4(),
-		Participants: map[string]int{},
+		Participants: map[string]Participant{},
 		Count: Count{
 			Left:  0,
 			Right: 0,
@@ -45,10 +53,11 @@ func CreateLobby(question string, leftOption string, rightOption string) *Lobby 
 	}
 }
 
+// there are some words that this library provides taht don't really provide for good names, so there is a small list here of words to remove
 var excludedWords = [...]string{"up", "upwards", "chigger"}
 
-// AddName will generate an anonymous name for users to use and add them to the lobby's participants
-func (l *Lobby) AddName() string {
+// AddParticipant will generate an anonymous name for users to use and add them to the lobby's participants
+func (l *Lobby) AddParticipant() Participant {
 	name := ""
 	shouldRetry := true
 	for shouldRetry {
@@ -64,5 +73,22 @@ func (l *Lobby) AddName() string {
 	}
 
 	println(name, "----------------------|--------------------------")
-	return ""
+	newParticipant := Participant{ID: uuid.NewV4(), Name: name}
+	l.Participants[newParticipant.ID.String()] = newParticipant
+	return newParticipant
 }
+
+// GetParticipantWsHandler will return the websocket handler that is responsible for keeping track on button presses from that participant
+func (l *Lobby) GetParticipantWsHandler(participantID string) websockets.ParticipantWsHandler {
+
+	for k := range l.Participants {
+		println(k)
+	}
+
+	if foundParticipant, ok := l.Participants[participantID]; ok {
+		return foundParticipant.handler
+	}
+	return nil
+}
+
+// stuck at finding participants

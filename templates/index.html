@@ -5,6 +5,7 @@
 
 <h1>Welcome to the home page!</h1>
 <div id="dynamic"></div>
+<p>{{ .err }}</p>
 <form action="/lobby/">
     <label for="question">Question:</label><br>
     <input type="text" id="question" name="question"><br>
@@ -13,7 +14,7 @@
     <label for="second-opt">Second Option:</label><br>
     <input type="text" id="second-opt" name="second-opt"><br>
 
-    <input type="submit" value="Submit" />
+    <button type="submit" class="btn btn-primary">Create Lobby</button>
 </form>
 
 <script src="assets/js/index.js"></script>
