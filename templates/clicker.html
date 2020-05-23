@@ -2,14 +2,17 @@
 
 <!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
-
+<script>
+    var _lobbyId = {{ .id }}
+    var _participantId = {{ .participantId }}
+</script>
 <h1>This is the clicker!</h1>
 <h1>Id: {{ .id }}</h1>
 <h1>Question: {{ .question }}</h1>
 <h1>Name: {{ .name }}</h1>
 <h1>Personal Id: {{ .participantId }}</h1>
 
-
+<p>http://localhost:5000/ws?lobbyId={{ .id }}&participantId={{ .participantId }}</p>
 
 <button type="submit" onclick="handleClick(true)" class="btn btn-primary">{{ .firstOpt }}</button>
 <button type="submit" onclick="handleClick(false)" class="btn btn-warning">{{ .secondOpt }}</button>

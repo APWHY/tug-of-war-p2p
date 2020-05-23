@@ -28,6 +28,7 @@ func Wshandler(w http.ResponseWriter, r *http.Request) {
 
 	for {
 		t, msg, err := conn.ReadMessage()
+		log.Printf("recieved message %s", msg)
 		if err != nil {
 			log.Printf("Socket connection terminated due to err: %s", err)
 			break

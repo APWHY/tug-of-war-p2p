@@ -72,8 +72,7 @@ func (l *Lobby) AddParticipant() Participant {
 
 	}
 
-	println(name, "----------------------|--------------------------")
-	newParticipant := Participant{ID: uuid.NewV4(), Name: name}
+	newParticipant := Participant{ID: uuid.NewV4(), Name: name, handler: websockets.ParticipantWsHandlerGen()}
 	l.Participants[newParticipant.ID.String()] = newParticipant
 	return newParticipant
 }
@@ -81,9 +80,11 @@ func (l *Lobby) AddParticipant() Participant {
 // GetParticipantWsHandler will return the websocket handler that is responsible for keeping track on button presses from that participant
 func (l *Lobby) GetParticipantWsHandler(participantID string) websockets.ParticipantWsHandler {
 
-	for k := range l.Participants {
-		println(k)
-	}
+	// for k := range l.Participants {
+	// 	println(k)
+	// 	println(participantID)
+	// 	println(k == participantID)
+	// }
 
 	if foundParticipant, ok := l.Participants[participantID]; ok {
 		return foundParticipant.handler
