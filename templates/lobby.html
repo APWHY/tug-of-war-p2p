@@ -12,11 +12,14 @@
 <h1>First: {{ .firstOpt }}</h1>
 <h1>Second: {{ .secondOpt }}</h1>
 
+<button type="submit" id="start-btn" class="btn btn-success">Start</button>
+<button type="submit" id="stop-btn" class=" btn btn-danger">Stop</button>
+
 <p>Clicker QR Code:</p>
 <a href={{ printf "/clicker/?lobbyId=%s" .id }}>Click on here for now!</a>
 
 
 <div id="dynamic"></div>
-<script src="assets/js/lobby.js"></script>
+<script type="module" src="assets/js/lobby.js"></script>
 <!--Embed the footer.html template at this location-->
 {{ template "footer.html" .}}

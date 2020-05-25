@@ -1,14 +1,15 @@
+import MessageType from './message.js'
+
 // getting values passed through by the html template
-var lobbyId = _lobbyId
-var participantId = _participantId
+let lobbyId = _lobbyId
+let participantId = _participantId
 
 console.log("lobbyId: ", lobbyId, "participatnId: ", participantId)
 
-url = `ws://localhost:5000/ws?lobbyId=${lobbyId}&participantId=${participantId}`;
-c = new WebSocket(url);
+let url = `ws://localhost:5000/ws?lobbyId=${lobbyId}&participantId=${participantId}`;
+let c = new WebSocket(url);
 
-send = function (data) {
-    `#output${(new Date()) + " ==> " + data + "\n"}`
+let send = function (data) {
     c.send(data)
 }
 
@@ -24,11 +25,12 @@ c.onmessage = function (msg) {
 // }
 
 
-function handleClick(isLeft) {
-    clicked = 'left' ? isLeft : 'right'
-    console.log(`you have clicked ${isLeft}`)
+function handleClick(clicked) {
+    console.log(`you have clicked ${clicked}`)
     c.send(clicked)
 }
+document.getElementById('first-opt').addEventListener('click', () => handleClick(MessageType.CLICK_LEFT))
+document.getElementById('second-opt').addEventListener('click', () => handleClick(MessageType.CLICK_RIGHT))
 
 
 

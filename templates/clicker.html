@@ -14,10 +14,10 @@
 
 <p>http://localhost:5000/ws?lobbyId={{ .id }}&participantId={{ .participantId }}</p>
 
-<button type="submit" onclick="handleClick(true)" class="btn btn-primary">{{ .firstOpt }}</button>
-<button type="submit" onclick="handleClick(false)" class="btn btn-warning">{{ .secondOpt }}</button>
+<button type="submit" id="first-opt" class="btn btn-primary">{{ .firstOpt }}</button>
+<button type="submit" id="second-opt" class=" btn btn-warning">{{ .secondOpt }}</button>
 
 <div id="dynamic"></div>
-<script src="assets/js/clicker.js"></script>
+<script type="module" src="assets/js/clicker.js"></script>
 <!--Embed the footer.html template at this location-->
 {{ template "footer.html" .}}

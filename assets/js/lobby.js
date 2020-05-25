@@ -1,12 +1,14 @@
+import MessageType from './message.js'
+
 // getting values passed through by the html template
-var lobbyId = _lobbyId
+let lobbyId = _lobbyId
 
 console.log("lobbyId: ", lobbyId)
 
-url = `ws://localhost:5000/ws?lobbyId=${lobbyId}`;
-c = new WebSocket(url);
+let url = `ws://localhost:5000/ws?lobbyId=${lobbyId}`;
+let c = new WebSocket(url);
 
-send = function (data) {
+let send = function (data) {
     `#output${(new Date()) + " ==> " + data + "\n"}`
     c.send(data)
 }
@@ -21,6 +23,16 @@ c.onmessage = function (msg) {
 //         function () { send("ping") }
 //         , 1000)
 // }
+
+function handleClick(clicked) {
+    console.log(`you have clicked ${clicked}`)
+    c.send(clicked)
+}
+document.getElementById('start-btn').addEventListener('click', () => handleClick(MessageType.START))
+document.getElementById('stop-btn').addEventListener('click', () => handleClick(MessageType.STOP))
+
+
+
 
 
 

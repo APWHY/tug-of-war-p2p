@@ -26,6 +26,7 @@ type Participant struct {
 	ID      uuid.UUID
 	Name    string
 	handler websockets.ParticipantWsHandler
+	Count   Count
 }
 
 // A Lobby is the representation of a single 'game' of tug of war
@@ -35,6 +36,8 @@ type Lobby struct {
 	Count        Count
 	Question     Question
 	handler      websockets.LobbyWsHandler
+	lobbyPipe    chan websockets.MessageType
+	clickerPipe  chan websockets.MessageType
 }
 
 // CreateLobby is a convienence wrapper for creating a lobby with just a question
@@ -51,7 +54,9 @@ func CreateLobby(question string, leftOption string, rightOption string) *Lobby 
 			Left:     leftOption,
 			Right:    rightOption,
 		},
-		handler: websockets.LobbyWsHandlerGen(),
+		handler:     websockets.LobbyWsHandlerGen(),
+		lobbyPipe:   make(chan websockets.MessageType),
+		clickerPipe: make(chan websockets.MessageType),
 	}
 }
 
