@@ -1,4 +1,4 @@
-import MessageType from './message.js'
+import { message, MessageType } from './message.js'
 
 // getting values passed through by the html template
 let lobbyId = _lobbyId
@@ -14,8 +14,8 @@ let send = function (data) {
 }
 
 c.onmessage = function (msg) {
-    `#output${(new Date()) + " <== " + msg.data + "\n"}`
-    console.log(msg)
+    console.log(JSON.parse(msg.data))
+
 }
 
 // c.onopen = function () {
@@ -29,8 +29,8 @@ function handleClick(clicked) {
     console.log(`you have clicked ${clicked}`)
     c.send(clicked)
 }
-document.getElementById('first-opt').addEventListener('click', () => handleClick(MessageType.CLICK_LEFT))
-document.getElementById('second-opt').addEventListener('click', () => handleClick(MessageType.CLICK_RIGHT))
+document.getElementById('first-opt').addEventListener('click', () => handleClick(message(MessageType.CLICK_LEFT, participantId)))
+document.getElementById('second-opt').addEventListener('click', () => handleClick(message(MessageType.CLICK_RIGHT, participantId)))
 
 
 

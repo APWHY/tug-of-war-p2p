@@ -39,7 +39,6 @@ func main() {
 		question := c.Query("question")
 		firstOption := c.Query("first-opt")
 		secondOption := c.Query("second-opt")
-		log.Println(question, firstOption, secondOption, "----------")
 
 		// redirect back to the home page if all required parameters are not provided
 		if question == "" || firstOption == "" || secondOption == "" {
@@ -67,7 +66,7 @@ func main() {
 				"lobby.html",
 				gin.H{
 					"title":     "Lobby",
-					"id":        newLobby.ID,
+					"lobbyId":   newLobby.ID,
 					"question":  newLobby.Question.Question,
 					"firstOpt":  newLobby.Question.Left,
 					"secondOpt": newLobby.Question.Right,
@@ -119,11 +118,10 @@ func main() {
 
 			if participantID == "" {
 				log.Println("returning lobby ws: ", lobbyID)
-				foundLobby.GetLobbyWsHandler()(c.Writer, c.Request)
+				foundLobby.MakeLobbyWsHandler(c.Writer, c.Request)
 			} else {
-				if wsHandler, ok := foundLobby.GetParticipantWsHandler(participantID); ok {
+				if foundLobby.MakeParticipantWsHandler(c.Writer, c.Request, participantID) {
 					log.Println("found participant: ", lobbyID)
-					wsHandler(c.Writer, c.Request)
 				} else {
 					log.Println("invalid participant id received: ", participantID)
 					c.HTML(

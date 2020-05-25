@@ -3,11 +3,11 @@
 <!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
 <script>
-    var _lobbyId = {{ .id }}
+    var _lobbyId = {{ .lobbyId }}
 </script>
 <h1>This is a lobby!</h1>
 <h1>{{ .lobby }}</h1>
-<h1>Id: {{ .id }}</h1>
+<h1>Lobby Id: {{ .lobbyId }}</h1>
 <h1>Question: {{ .question }}</h1>
 <h1>First: {{ .firstOpt }}</h1>
 <h1>Second: {{ .secondOpt }}</h1>
@@ -16,7 +16,7 @@
 <button type="submit" id="stop-btn" class=" btn btn-danger">Stop</button>
 
 <p>Clicker QR Code:</p>
-<a href={{ printf "/clicker/?lobbyId=%s" .id }}>Click on here for now!</a>
+<a href={{ printf "/clicker/?lobbyId=%s" .lobbyId }}>Click on here for now!</a>
 
 
 <div id="dynamic"></div>

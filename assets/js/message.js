@@ -1,4 +1,6 @@
-const MessageType = {
+// message.js -- helper functions to make serialisation and deserialisation of messages sent via websocket easier
+
+export const MessageType = {
     START: 0,
     STOP: 1,
     CLICK_LEFT: 2,
@@ -6,4 +8,7 @@ const MessageType = {
 };
 Object.freeze(MessageType);
 
-export default MessageType
+
+export function message(type, value) {
+    return JSON.stringify({ type, value })
+}

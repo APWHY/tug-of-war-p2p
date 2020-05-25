@@ -1,6 +1,7 @@
 package websockets
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 
@@ -12,74 +13,98 @@ var wsupgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
-// MessageType is an enum representing the types of messages that can be passed to and from the lobby channel
-type MessageType int
+type messageType int
 
 // this should be matched up to the MessageType constant in assets/js/message.js
 const (
 	// Start starts the game
-	Start MessageType = iota
+	Start messageType = iota
 	// Stop ends the game and gets click data
 	Stop
 	// ClickLeft shows that the left option has been clicked once
 	ClickLeft
 	// ClickRight shows that the right option has been clicked once
 	ClickRight
+	messageTypeLast
 )
 
-// ParticipantWsHandler is a websocket handler for an individual participant
-type ParticipantWsHandler = func(http.ResponseWriter, *http.Request)
+// Message is the information sent to and from the server and the websocket client
+type Message struct {
+	Kind  messageType `json:"type"`
+	Value string      `json:"value"`
+}
 
-// LobbyWsHandler is a websocket handler for an individual lobby
-type LobbyWsHandler = func(http.ResponseWriter, *http.Request)
+// MessageSender is a function that will allow you to send a message to the client
+type MessageSender func(*Message)
 
-// Wshandler only echos for now -- this needs to be come two different types of websocket handler (one for clickers and one for the lobby)
-func Wshandler(w http.ResponseWriter, r *http.Request) {
+// WsHandlerGen returns a connection that will allow us to send messages as well as running a goroutine that pipes recieved messages into the specified channel
+func WsHandlerGen(w http.ResponseWriter, r *http.Request, channel chan *Message) (MessageSender, bool) {
 	conn, err := wsupgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Printf("Failed to set websocket upgrade: %+v", err)
-		return
+		return nil, false
 	}
-
-	for {
-		t, msg, err := conn.ReadMessage()
-		log.Printf("recieved message %s", msg)
-		if err != nil {
-			log.Printf("Socket connection terminated due to err: %s", err)
-			break
-		}
-		conn.WriteMessage(t, msg)
-	}
-}
-
-// ParticipantWsHandlerGen will generate a ParticipantWsHandler for us to use
-func ParticipantWsHandlerGen() ParticipantWsHandler {
-	return Wshandler
-}
-
-// LobbyWsHandlerGen will generate a LobbyWsHandler for us to use
-func LobbyWsHandlerGen() LobbyWsHandler {
-	return Wshandler
-}
-
-// WshandlerGen returns a connection that will allow us to send messages as well as running a goroutine that pipes recieved messages into the specified channel
-func WshandlerGen(w http.ResponseWriter, r *http.Request, channel chan MessageType) {
-	conn, err := wsupgrader.Upgrade(w, r, nil)
-	if err != nil {
-		log.Printf("Failed to set websocket upgrade: %+v", err)
-		return
-	}
+	// listen for messages and pass them into channel
 	go func() {
 		for {
-			t, msg, err := conn.ReadMessage()
+			_, msg, err := conn.ReadMessage()
 			log.Printf("recieved message %s", msg)
 			if err != nil {
 				log.Printf("Socket connection terminated due to err: %s", err)
 				break
 			}
-			conn.WriteMessage(t, msg)
-			channel <- msg
+			msgInt, ok := msgUnmarshal(msg)
+			if ok {
+				channel <- msgInt
+			}
 		}
 	}()
+	return senderGenerator(conn), true
 
+}
+
+func senderGenerator(c *websocket.Conn) MessageSender {
+	return func(msg *Message) {
+		c.WriteMessage(websocket.TextMessage, msgMarshal(msg))
+	}
+}
+
+func msgUnmarshal(msg []byte) (*Message, bool) {
+
+	var dat map[string]interface{}
+	if err := json.Unmarshal(msg, &dat); err != nil {
+		log.Printf("Error unmarshalling message: %s", err)
+	}
+
+	kind, ok := dat["type"]
+
+	if !ok {
+		log.Printf("message %s does not have a 'type' field", msg)
+		return nil, false
+	}
+
+	if messageType(kind.(float64)) >= messageTypeLast {
+		log.Printf("kind %d is not a type of Message", kind)
+		return nil, false
+	}
+
+	value, ok := dat["value"]
+
+	if !ok {
+		log.Printf("message %s has no 'value' field", msg)
+		return nil, false
+	}
+	return &Message{
+		Kind:  messageType(kind.(float64)), // we only send ints but json automatically assumes float64 so we need to assert before we convert
+		Value: value.(string),
+	}, true
+
+}
+
+func msgMarshal(msg *Message) []byte {
+	retVal, err := json.Marshal(msg)
+	if err != nil { // this should always be working, so we don't bother to pass the error
+		log.Printf("error marshalling message to json: %s", err)
+	}
+	return retVal
 }
