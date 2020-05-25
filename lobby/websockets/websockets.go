@@ -41,3 +41,8 @@ func Wshandler(w http.ResponseWriter, r *http.Request) {
 func ParticipantWsHandlerGen() ParticipantWsHandler {
 	return Wshandler
 }
+
+// LobbyWsHandlerGen will generate a LobbyWsHandler for us to use
+func LobbyWsHandlerGen() LobbyWsHandler {
+	return Wshandler
+}

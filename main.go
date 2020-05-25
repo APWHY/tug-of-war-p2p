@@ -116,20 +116,25 @@ func main() {
 		participantID := c.Query("participantId")
 		if foundLobby, ok := lobbies[lobbyID]; ok {
 			log.Println("found lobby: ", lobbyID)
-			wsHandler := foundLobby.GetParticipantWsHandler(participantID)
-			if wsHandler != nil {
-				log.Println("found participant: ", lobbyID)
-				wsHandler(c.Writer, c.Request)
+
+			if participantID == "" {
+				log.Println("returning lobby ws: ", lobbyID)
+				foundLobby.GetLobbyWsHandler()(c.Writer, c.Request)
 			} else {
-				log.Println("invalid participant id received: ", participantID)
-				c.HTML(
-					http.StatusOK,
-					"index.html",
-					gin.H{
-						"title": "Home Page",
-						"err":   "invalid participant id (from clicker)",
-					},
-				)
+				if wsHandler, ok := foundLobby.GetParticipantWsHandler(participantID); ok {
+					log.Println("found participant: ", lobbyID)
+					wsHandler(c.Writer, c.Request)
+				} else {
+					log.Println("invalid participant id received: ", participantID)
+					c.HTML(
+						http.StatusOK,
+						"index.html",
+						gin.H{
+							"title": "Home Page",
+							"err":   "invalid participant id (from clicker)",
+						},
+					)
+				}
 			}
 		} else {
 			log.Println("invalid lobby id received: ", lobbyID)

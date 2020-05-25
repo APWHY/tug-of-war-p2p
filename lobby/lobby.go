@@ -34,6 +34,7 @@ type Lobby struct {
 	Participants map[string]Participant
 	Count        Count
 	Question     Question
+	handler      websockets.LobbyWsHandler
 }
 
 // CreateLobby is a convienence wrapper for creating a lobby with just a question
@@ -50,11 +51,12 @@ func CreateLobby(question string, leftOption string, rightOption string) *Lobby 
 			Left:     leftOption,
 			Right:    rightOption,
 		},
+		handler: websockets.LobbyWsHandlerGen(),
 	}
 }
 
 // there are some words that this library provides taht don't really provide for good names, so there is a small list here of words to remove
-var excludedWords = [...]string{"up", "upwards", "chigger"}
+var excludedWords = [...]string{"up", "upwards", "chigger", "woodcock"}
 
 // AddParticipant will generate an anonymous name for users to use and add them to the lobby's participants
 func (l *Lobby) AddParticipant() Participant {
@@ -78,7 +80,7 @@ func (l *Lobby) AddParticipant() Participant {
 }
 
 // GetParticipantWsHandler will return the websocket handler that is responsible for keeping track on button presses from that participant
-func (l *Lobby) GetParticipantWsHandler(participantID string) websockets.ParticipantWsHandler {
+func (l *Lobby) GetParticipantWsHandler(participantID string) (websockets.ParticipantWsHandler, bool) {
 
 	// for k := range l.Participants {
 	// 	println(k)
@@ -87,9 +89,12 @@ func (l *Lobby) GetParticipantWsHandler(participantID string) websockets.Partici
 	// }
 
 	if foundParticipant, ok := l.Participants[participantID]; ok {
-		return foundParticipant.handler
+		return foundParticipant.handler, true
 	}
-	return nil
+	return nil, false
 }
 
-// stuck at finding participants
+// GetLobbyWsHandler will return the websocket handler that is responsible for recieving the current button presses from all clickers
+func (l *Lobby) GetLobbyWsHandler() websockets.LobbyWsHandler {
+	return l.handler
+}

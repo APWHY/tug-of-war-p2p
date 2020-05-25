@@ -2,7 +2,9 @@
 
 <!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
-
+<script>
+    var _lobbyId = {{ .id }}
+</script>
 <h1>This is a lobby!</h1>
 <h1>{{ .lobby }}</h1>
 <h1>Id: {{ .id }}</h1>
