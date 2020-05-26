@@ -6,13 +6,12 @@ let participantId = _participantId
 
 console.log("lobbyId: ", lobbyId, "participatnId: ", participantId)
 
-let url = `ws://localhost:5000/ws?lobbyId=${lobbyId}&participantId=${participantId}`;
+let url = `ws://${window.location.host}/ws?lobbyId=${lobbyId}&participantId=${participantId}`;
 let c = new WebSocket(url);
 
 let send = function (data) {
     c.send(data)
 }
-
 c.onmessage = function (msg) {
     console.log(JSON.parse(msg.data))
 

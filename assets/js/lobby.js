@@ -6,7 +6,7 @@ let lobbyId = _lobbyId
 
 console.log("lobbyId: ", lobbyId)
 
-let url = `ws://localhost:5000/ws?lobbyId=${lobbyId}`;
+let url = `ws://${window.location.host}/ws?lobbyId=${lobbyId}`;
 let c = new WebSocket(url);
 
 
