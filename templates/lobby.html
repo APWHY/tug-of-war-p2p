@@ -3,8 +3,11 @@
 <!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
 <script>
-    var _lobbyId = {{ .lobbyId }}
+    var _lobbyId = {{ .lobbyId }};
+    var _qrCodeUrl = "http://" + window.location.host + {{ printf "/clicker/?lobbyId=%s" .lobbyId }};
 </script>
+<script type="text/javascript" src="assets/js/qrcode.min.js"></script>
+
 <h1>This is a lobby!</h1>
 <h1>{{ .lobby }}</h1>
 <h1>Lobby Id: {{ .lobbyId }}</h1>
@@ -14,12 +17,31 @@
 
 <button type="submit" id="start-btn" class="btn btn-success">Start</button>
 <button type="submit" id="stop-btn" class=" btn btn-danger">Stop</button>
-
+<div class="clicker-wrapper">
+    <div class="btn btn-primary expand">
+        <p class="clicker-text">Submit</p>
+    </div>
+    <div class="btn btn-warning expand">
+        <p class="clicker-text">Submit 2nd</p>
+    </div>
+</div>
 <p>Clicker QR Code:</p>
 <a href={{ printf "/clicker/?lobbyId=%s" .lobbyId }}>Click on here for now!</a>
+<div id="qrcode" style="width:200px; height:200px; margin-top:15px;"></div>
 
 
 <div id="dynamic"></div>
+
 <script type="module" src="assets/js/lobby.js"></script>
+<script type="text/javascript">
+    var qrcode = new QRCode(document.getElementById("qrcode"), {
+        width: 200,
+        height: 200
+    });
+
+    qrcode.makeCode(_qrCodeUrl);
+
+
+</script>
 <!--Embed the footer.html template at this location-->
 {{ template "footer.html" .}}

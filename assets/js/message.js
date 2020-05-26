@@ -12,3 +12,6 @@ Object.freeze(MessageType);
 export function message(type, value) {
     return JSON.stringify({ type, value })
 }
+export function messageIsValid(message) {
+    return message.type != undefined && message.value != undefined
+}

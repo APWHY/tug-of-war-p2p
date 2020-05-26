@@ -127,5 +127,6 @@ func main() {
 	})
 
 	// Start and run the server
+	router.Run("192.168.0.24:5000")
 	router.Run(":5000")
 }

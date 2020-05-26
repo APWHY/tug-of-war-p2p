@@ -1,3 +1,10 @@
+:root {
+    --clicker-max-font: 36;
+    --clicker-min-font: 16;
+    --clicker-max-width-scaler: 1600;
+    --clicker-min-width-scaler: 600;
+}
+
 body {
     background-color: #b3d9db;
 }
@@ -5,4 +12,36 @@ body {
 h1 {
     color: #fff;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+.clicker-wrapper {
+    width: 100%;
+    display: flex
+}
+
+.expand {
+    height: 80vmin;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clicker-text {
+    font-size: 30px;
+    overflow: wrap;
+    white-space: initial;
+    word-break: break-all;
+}
+
+@media (min-width: 600px) and (max-width: 1600px) {
+    .clicker-text {
+        font-size: 5vw;
+    }
+}
+
+@media (min-width: 1600px) {
+    .clicker-text {
+        font-size: 80px;
+    }
 }

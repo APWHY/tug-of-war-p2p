@@ -1,19 +1,19 @@
 import { message, MessageType } from './message.js'
 
 // getting values passed through by the html template
-let lobbyId = _lobbyId
-let participantId = _participantId
+let lobbyId = _lobbyId;
+let participantId = _participantId;
 
-console.log("lobbyId: ", lobbyId, "participatnId: ", participantId)
+console.log("lobbyId: ", lobbyId, "participatnId: ", participantId);
 
 let url = `ws://${window.location.host}/ws?lobbyId=${lobbyId}&participantId=${participantId}`;
 let c = new WebSocket(url);
 
 let send = function (data) {
-    c.send(data)
+    c.send(data);
 }
 c.onmessage = function (msg) {
-    console.log(JSON.parse(msg.data))
+    console.log(JSON.parse(msg.data));
 
 }
 
@@ -25,11 +25,11 @@ c.onmessage = function (msg) {
 
 
 function handleClick(clicked) {
-    console.log(`you have clicked ${clicked}`)
-    c.send(clicked)
+    console.log(`you have clicked ${clicked}`);
+    c.send(clicked);
 }
-document.getElementById('first-opt').addEventListener('click', () => handleClick(message(MessageType.CLICK_LEFT, participantId)))
-document.getElementById('second-opt').addEventListener('click', () => handleClick(message(MessageType.CLICK_RIGHT, participantId)))
+document.getElementById('first-opt').addEventListener('click', () => handleClick(message(MessageType.CLICK_LEFT, participantId)));
+document.getElementById('second-opt').addEventListener('click', () => handleClick(message(MessageType.CLICK_RIGHT, participantId)));
 
 
 

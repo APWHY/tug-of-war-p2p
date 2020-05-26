@@ -6,18 +6,17 @@
     var _lobbyId = {{ .id }}
     var _participantId = {{ .participantId }}
 </script>
-<h1>This is the clicker!</h1>
-<h1>Id: {{ .id }}</h1>
 <h1>Question: {{ .question }}</h1>
-<h1>Name: {{ .name }}</h1>
-<h1>Personal Id: {{ .participantId }}</h1>
+<div class="clicker-wrapper">
+    <div class="btn btn-primary expand" id="first-opt">
+        <p class="clicker-text">{{ .firstOpt }}</p>
+    </div>
+    <div class="btn btn-warning expand" id="second-opt">
+        <p class="clicker-text">{{ .secondOpt }}</p>
+    </div>
+</div>
 
-<p>http://localhost:5000/ws?lobbyId={{ .id }}&participantId={{ .participantId }}</p>
 
-<button type="submit" id="first-opt" class="btn btn-primary">{{ .firstOpt }}</button>
-<button type="submit" id="second-opt" class=" btn btn-warning">{{ .secondOpt }}</button>
-
-<div id="dynamic"></div>
 <script type="module" src="assets/js/clicker.js"></script>
 <!--Embed the footer.html template at this location-->
 {{ template "footer.html" .}}
