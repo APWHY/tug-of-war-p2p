@@ -6,16 +6,23 @@
     var _lobbyId = {{ .id }}
     var _participantId = {{ .participantId }}
 </script>
-<h1>Question: {{ .question }}</h1>
-<div class="clicker-wrapper">
-    <div class="btn btn-primary expand" id="first-opt">
-        <p class="clicker-text">{{ .firstOpt }}</p>
-    </div>
-    <div class="btn btn-warning expand" id="second-opt">
-        <p class="clicker-text">{{ .secondOpt }}</p>
+<h1>Hello! Your name is: {{ .name }}</h1>
+<div id="before-finish">
+    <h1>Question: {{ .question }}</h1>
+    <p id="timer"></p>
+    <div class="clicker-wrapper">
+        <div class="btn btn-primary expand" id="first-opt">
+            <p class="clicker-text">{{ .firstOpt }}</p>
+        </div>
+        <div class="btn btn-warning expand" id="second-opt">
+            <p class="clicker-text">{{ .secondOpt }}</p>
+        </div>
     </div>
 </div>
 
+<div id="after-finish" hidden>
+    <h1>The round has finished. Please look at the lobby screen to see the results.</h1>
+</div>
 
 <script type="module" src="assets/js/clicker.js"></script>
 <!--Embed the footer.html template at this location-->

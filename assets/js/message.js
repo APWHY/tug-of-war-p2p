@@ -8,10 +8,16 @@ export const MessageType = {
 };
 Object.freeze(MessageType);
 
+export const EMPTY_COUNT = {
+    [MessageType.CLICK_LEFT]: 0,
+    [MessageType.CLICK_RIGHT]: 0
+};
+Object.freeze(EMPTY_COUNT);
 
 export function message(type, value) {
     return JSON.stringify({ type, value })
 }
+
 export function messageIsValid(message) {
     return message.type != undefined && message.value != undefined
 }

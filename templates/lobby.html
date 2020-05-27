@@ -4,31 +4,41 @@
 {{ template "header.html" .}}
 <script>
     var _lobbyId = {{ .lobbyId }};
+    var _firstOpt = {{ .firstOpt }};
+    var _secondOpt = {{ .secondOpt }};
     var _qrCodeUrl = "http://" + window.location.host + {{ printf "/clicker/?lobbyId=%s" .lobbyId }};
 </script>
 <script type="text/javascript" src="assets/js/qrcode.min.js"></script>
 
 <h1>This is a lobby!</h1>
-<h1>{{ .lobby }}</h1>
-<h1>Lobby Id: {{ .lobbyId }}</h1>
 <h1>Question: {{ .question }}</h1>
-<h1>First: {{ .firstOpt }}</h1>
-<h1>Second: {{ .secondOpt }}</h1>
+<h3>First: {{ .firstOpt }} Second: {{ .secondOpt }}</h3>
+<div class="before" id="qr-wrapper">
+    <p>Clicker QR Code:</p>
+    <a href={{ printf "/clicker/?lobbyId=%s" .lobbyId }}>Click on here for now!</a>
+</div>
+<div id="qrcode" class="before" style="width:200px; height:200px; margin-top:15px;"></div>
+<div class="during" id="timer-wrapper">
+    <p id="timer"></p>
+</div>
+<div class="during">
 
-<button type="submit" id="start-btn" class="btn btn-success">Start</button>
-<button type="submit" id="stop-btn" class=" btn btn-danger">Stop</button>
-<div class="clicker-wrapper">
-    <div class="btn btn-primary expand">
-        <p class="clicker-text">Submit</p>
-    </div>
-    <div class="btn btn-warning expand">
-        <p class="clicker-text">Submit 2nd</p>
+    <div id="tug-outside">
+        <div id="tug-inside">
+            <div id="tug-marker"></div>
+        </div>
     </div>
 </div>
-<p>Clicker QR Code:</p>
-<a href={{ printf "/clicker/?lobbyId=%s" .lobbyId }}>Click on here for now!</a>
-<div id="qrcode" style="width:200px; height:200px; margin-top:15px;"></div>
 
+<div class="before during">
+    <button type="submit" id="start-btn" class="btn btn-success">Start</button>
+    <button type="submit" id="stop-btn" class="btn btn-danger">Stop</button>
+</div>
+<div class="after">
+    <p id="winner"></p>
+    <table id="scoreboard">
+</div>
+</table>
 
 <div id="dynamic"></div>
 
