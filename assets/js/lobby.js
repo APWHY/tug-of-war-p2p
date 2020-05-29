@@ -17,21 +17,31 @@ let clicker_counts = {};
 let marker = new Marker('tug-marker', () => handleStop());
 c.onmessage = function (msg) {
     let parsed = JSON.parse(msg.data);
+    console.log("recieved msg:", msg.data)
     if (messageIsValid(parsed)) {
         switch (parsed.type) {
+            case MessageType.NEW_USER:
+                console.log(msg.data);
+
+                let playerList = document.getElementById("player-list");
+                document.getElementById('player-list-empty').hidden = true;
+                let row = playerList.insertRow();
+                let cell = row.insertCell();
+                let text = document.createTextNode(parsed.value);
+                cell.appendChild(text);
+
+
+                clicker_counts[parsed.value] = {
+                    ...EMPTY_COUNT,
+                    'name': parsed.value
+                };
+                console.log(clicker_counts)
+                break;
             case MessageType.CLICK_LEFT:
             case MessageType.CLICK_RIGHT:
                 if (marker.running) {
                     marker.count[parsed.type]++;
-                    if (parsed.value in clicker_counts) {
-                        clicker_counts[parsed.value][parsed.type]++;
-                    } else {
-                        clicker_counts[parsed.value] = {
-                            ...EMPTY_COUNT,
-                            'name': parsed.value
-                        };
-                        clicker_counts[parsed.value][parsed.type]++;
-                    }
+                    clicker_counts[parsed.value][parsed.type]++;
                     marker.updateTarget();
                 }
                 break;
@@ -73,6 +83,13 @@ function generateScoreboard() {
     for (let player of players) {
         console.log("player: ", player)
         row = table.insertRow();
+        if (player[MessageType.CLICK_LEFT] > player[MessageType.CLICK_RIGHT]) {
+            row.className = 'table-info'
+        } else if (player[MessageType.CLICK_LEFT] < player[MessageType.CLICK_RIGHT]) {
+            row.className = 'table-warning'
+        }
+
+
         for (let key of ['name', MessageType.CLICK_LEFT, MessageType.CLICK_RIGHT]) {
             let cell = row.insertCell();
             let text = document.createTextNode(player[key]);

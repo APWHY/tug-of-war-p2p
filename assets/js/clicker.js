@@ -7,6 +7,9 @@ let participantId = _participantId;
 
 let url = `ws://${window.location.host}/ws?lobbyId=${lobbyId}&participantId=${participantId}`;
 let c = new WebSocket(url);
+c.onopen = function (event) {
+    c.send(message(MessageType.NEW_USER, participantId))
+};
 
 let timerInterval = undefined;
 c.onmessage = function (msg) {

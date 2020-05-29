@@ -59,14 +59,12 @@ func (l *Lobby) AddParticipant() *Participant {
 	shouldRetry := true
 	for shouldRetry {
 		shouldRetry = false
-		name = petname.Generate(2, " ")
+		name = strings.Title(petname.Generate(2, " "))
 		for _, word := range excludedWords {
 			if strings.Contains(name, word) {
 				shouldRetry = true
 			}
-
 		}
-
 	}
 
 	newParticipant := &Participant{ID: uuid.NewV4(), Name: name}
@@ -96,6 +94,7 @@ func (l *Lobby) MakeParticipantWsHandler(w http.ResponseWriter, r *http.Request,
 		}
 		log.Printf("Making sender for participant: %v+", foundParticipant)
 		foundParticipant.sender = sender
+
 		log.Printf("Participant is now: %v+", foundParticipant)
 
 		return ok

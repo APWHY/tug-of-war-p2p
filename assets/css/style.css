@@ -1,10 +1,12 @@
 body {
     background-color: #b3d9db;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-h1 {
-    color: #fff;
-    font-family: Arial, Helvetica, sans-serif;
+.fill {
+    flex: 1;
 }
 
 .clicker-wrapper {
@@ -39,27 +41,34 @@ h1 {
     }
 }
 
+.table th {
+    border-top: none
+}
+
 #timer {
     font-size: 40px;
 }
 
 #tug-outside {
-    background-color: green;
+    background: linear-gradient(90deg, var(--info) 50%, var(--warning) 50%);
     display: flex;
     height: 50px;
     justify-content: center;
 }
 
 #tug-inside {
-    background-color: pink;
+    background-color: white;
+    border-left: black 2px solid;
+    border-right: black 2px solid;
+    opacity: 0.5;
     width: 60%;
     height: 100%;
 }
 
 #tug-marker {
-    width: 2px;
-    background-color: red;
+    width: 20px;
+    background-color: maroon;
     height: 100%;
     position: relative;
-    left: calc(50% - 2px)
+    left: calc(50% - 10px)
 }

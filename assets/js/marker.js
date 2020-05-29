@@ -7,7 +7,7 @@ class Marker {
         this.target = 50;
         this.speed = 0.05;
         this.decay = 0.85
-        this.threshold = 3;//150;
+        this.threshold = 150;//150;
         this.count = { ...EMPTY_COUNT }
         this.running = false;
         this.startAnimation = this.startAnimation.bind(this);
@@ -30,7 +30,7 @@ class Marker {
         this.px = this.px + this.speed * (this.target - this.px);
         if (this.px > 100) this.px = 100;
         if (this.px < 0) this.px = 0;
-        this.elem.style.left = `calc( ${this.px}% - 2px)`;
+        this.elem.style.left = `calc( ${this.px}% - 10px)`;
         if (this.px === 100 || this.px === 0) {
             console.log(this.handleStop)
             this.handleStop()

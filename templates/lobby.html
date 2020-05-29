@@ -9,38 +9,78 @@
     var _qrCodeUrl = "http://" + window.location.host + {{ printf "/clicker/?lobbyId=%s" .lobbyId }};
 </script>
 <script type="text/javascript" src="assets/js/qrcode.min.js"></script>
+<div class="bg-light py-3 flex-grow-1 fill">
+    <div class="container">
+        <div class="container">
+            <h1 class="display-4">Welcome! </h1>
+            <p class="lead">Question: {{ .question }}</p>
+            <h2 class=" display-4 text-danger lead d-flex justify-content-between"><span
+                    class="badge badge-info">{{ .firstOpt }}</span> vs. <span
+                    class="badge badge-warning">{{ .secondOpt }}</span></h2>
 
-<h1>This is a lobby!</h1>
-<h1>Question: {{ .question }}</h1>
-<h3>First: {{ .firstOpt }} Second: {{ .secondOpt }}</h3>
-<div class="before" id="qr-wrapper">
-    <p>Clicker QR Code:</p>
-    <a href={{ printf "/clicker/?lobbyId=%s" .lobbyId }}>Click on here for now!</a>
-</div>
-<div id="qrcode" class="before" style="width:200px; height:200px; margin-top:15px;"></div>
-<div class="during" id="timer-wrapper">
-    <p id="timer"></p>
-</div>
-<div class="during">
+            <hr class="my-4">
+            <div class="row before">
+                <div class="col-8">
+                    <a id="qrcode-link">
+                        <div id="qrcode" class="p-3 d-flex justify-content-center"></div>
+                    </a>
+                    <p>This lobby has yet to start. Join the lobby by scanning the QR-Code with your phone.</p>
+                    <p>You can start the lobby by pressing the start button below.</p>
+                    <p>The lobby will end when the stop button is pressed or the marker exits the pink rectangle it is
+                        enclosed
+                        within
+                    </p>
+                    <p>The marker will become more volatile the longer the lobby is running, so make sure you keep
+                        tapping!</p>
 
-    <div id="tug-outside">
-        <div id="tug-inside">
-            <div id="tug-marker"></div>
+                </div>
+                <div class="col-4">
+                    <table class="table">
+                        <thead class="">
+                            <tr>
+                                <th scope="col ">Participants</th>
+                            </tr>
+                        </thead>
+                        <tbody id="player-list">
+                            <tr id="player-list-empty">
+                                <td>
+                                    <p> There doesn't seem to be anyone in here yet :(</p>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
+
+
+            </div>
+
+            <div class="during" id="timer-wrapper">
+                <p id="timer"></p>
+            </div>
+            <div class="during">
+
+                <div id="tug-outside">
+                    <div id="tug-inside">
+                        <div id="tug-marker"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="after">
+                <p id="winner"></p>
+                <table id="scoreboard" class="table">
+                </table>
+
+            </div>
+            <p class="lead">
+                <a class="btn btn-primary btn-lg before" href="#" id="start-btn" role="button">Start</a>
+                <a class="btn btn-danger btn-lg during" href="#" id="stop-btn" role="button">Stop</a>
+            </p>
         </div>
     </div>
 </div>
 
-<div class="before during">
-    <button type="submit" id="start-btn" class="btn btn-success">Start</button>
-    <button type="submit" id="stop-btn" class="btn btn-danger">Stop</button>
-</div>
-<div class="after">
-    <p id="winner"></p>
-    <table id="scoreboard">
-</div>
-</table>
-
-<div id="dynamic"></div>
 
 <script type="module" src="assets/js/lobby.js"></script>
 <script type="text/javascript">
@@ -50,7 +90,7 @@
     });
 
     qrcode.makeCode(_qrCodeUrl);
-
+    document.getElementById("qrcode-link").setAttribute("href", _qrCodeUrl);
 
 </script>
 <!--Embed the footer.html template at this location-->

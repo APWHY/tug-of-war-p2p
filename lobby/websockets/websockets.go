@@ -25,6 +25,8 @@ const (
 	ClickLeft
 	// ClickRight shows that the right option has been clicked once
 	ClickRight
+	// NewUser tells the lobby that a new user has joined the lobby
+	NewUser
 	messageTypeLast
 )
 
