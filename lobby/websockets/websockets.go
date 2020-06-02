@@ -33,7 +33,7 @@ const (
 // Message is the information sent to and from the server and the websocket client
 type Message struct {
 	Kind  messageType `json:"type"`
-	Value string      `json:"value"`
+	Value interface{} `json:"value"`
 }
 
 // MessageSender is a function that will allow you to send a message to the client
@@ -98,7 +98,7 @@ func msgUnmarshal(msg []byte) (*Message, bool) {
 	}
 	return &Message{
 		Kind:  messageType(kind.(float64)), // we only send ints but json automatically assumes float64 so we need to assert before we convert
-		Value: value.(string),
+		Value: value,
 	}, true
 
 }

@@ -1,5 +1,5 @@
 import { message, MessageType, messageIsValid, EMPTY_COUNT } from './message.js'
-import { addSeconds, startTimer } from './time.js'
+import { addSeconds, startTimer, START_TIMER_LENGTH } from './time.js'
 import Marker from './marker.js'
 
 // getting values passed through by the html template
@@ -30,7 +30,6 @@ c.onmessage = function (msg) {
                 let text = document.createTextNode(parsed.value);
                 cell.appendChild(text);
 
-
                 clicker_counts[parsed.value] = {
                     ...EMPTY_COUNT,
                     'name': parsed.value
@@ -44,6 +43,12 @@ c.onmessage = function (msg) {
                     clicker_counts[parsed.value][parsed.type]++;
                     marker.updateTarget();
                 }
+                break;
+            case MessageType.START:
+                console.log(msg.data, 'recieved start')
+                startTimer(parsed.value, marker.startAnimation);
+                setHidden(document.getElementsByClassName('before'), true);
+                setHidden(document.getElementsByClassName('during'), false);
                 break;
             default:
                 break;
@@ -106,11 +111,7 @@ function setHidden(elems, hidden) {
 
 // starts the tug of war game
 function handleStart() {
-    let to_time = addSeconds(6);
-    c.send(message(MessageType.START, `${to_time}`))
-    startTimer(to_time, marker.startAnimation);
-    setHidden(document.getElementsByClassName('before'), true)
-    setHidden(document.getElementsByClassName('during'), false)
+    c.send(message(MessageType.START, START_TIMER_LENGTH))
 }
 
 // ends the tug of war game

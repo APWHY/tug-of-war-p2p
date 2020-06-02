@@ -1,28 +1,42 @@
 <!--clicker.html-->
-
-<!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
 <script>
     var _lobbyId = {{ .id }}
     var _participantId = {{ .participantId }}
 </script>
-<h1>Hello! Your name is: {{ .name }}</h1>
-<div id="before-finish">
-    <h1>Question: {{ .question }}</h1>
-    <p id="timer"></p>
-    <div class="clicker-wrapper">
-        <div class="btn btn-info expand" id="first-opt">
-            <p class="clicker-text">{{ .firstOpt }}</p>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<div class="h-100 fill d-flex flex-column container-fluid">
+    <div class="row bg-secondary">
+        <div class="col-sm-4 p-2 d-flex bg-dark align-items-center">
+            <p class="text-light m-0 lead">Name: {{ .name }}</p>
         </div>
-        <div class="btn btn-warning expand" id="second-opt">
-            <p class="clicker-text">{{ .secondOpt }}</p>
+        <div id="blah" class="col-sm-8 p-2 d-flex align-items-center">
+            <p class="text-light m-0 lead">{{ .question }}</p>
         </div>
+
+
     </div>
+    <div id="before-finish" class="row fill position-relative">
+        <div class="p-0 col-sm-6">
+            <div class="bg-dark expand no-zoom" id="first-opt">
+                <p class="clicker-text display-4 text-info">{{ .firstOpt }}</p>
+            </div>
+        </div>
+        <div class="p-0 col-sm-6">
+            <div class="bg-dark expand no-zoom" id="second-opt">
+                <p class="clicker-text display-4 text-warning">{{ .secondOpt }}</p>
+            </div>
+        </div>
+        <div id="all-ripples" class="ripple-btn"></div>
+
+    </div>
+    <div id="after-finish" class="row bg-dark fill p-2" hidden>
+        <h1 class="text-light">The round has finished. Please look at the lobby screen to see the results.</h1>
+    </div>
+
 </div>
 
-<div id="after-finish" hidden>
-    <h1>The round has finished. Please look at the lobby screen to see the results.</h1>
-</div>
+
 
 <script type="module" src="assets/js/clicker.js"></script>
 <!--Embed the footer.html template at this location-->

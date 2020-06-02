@@ -1,7 +1,8 @@
 <!--lobby.html-->
 
-<!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
+{{ template "navbar.html" .}}
+
 <script>
     var _lobbyId = {{ .lobbyId }};
     var _firstOpt = {{ .firstOpt }};

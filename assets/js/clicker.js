@@ -33,6 +33,32 @@ c.onmessage = function (msg) {
 }
 
 
+function makeRippleGenerator(buttonId, buttonColorClass) {
+    let btn = document.getElementById(buttonId)
+    let rippleCanvas = document.getElementById('all-ripples')
+
+    btn.addEventListener('click', evt => {
+        let diffX = btn.getBoundingClientRect().left - rippleCanvas.getBoundingClientRect().left
+        let diffY = btn.getBoundingClientRect().top - rippleCanvas.getBoundingClientRect().top
+        let x = evt.offsetX + diffX;
+        let y = evt.offsetY + diffY;
+        let rippler = document.createElement('div');
+        rippler.classList.add('ripple');
+        rippler.classList.add(buttonColorClass);
+        rippler.style.left = `${x}px`;
+        rippler.style.top = `${y}px`;
+        console.log(evt)
+        rippleCanvas.appendChild(rippler);
+        rippler.addEventListener('animationend', rippler.remove)
+    })
+}
+
+makeRippleGenerator('first-opt', 'bg-info');
+makeRippleGenerator('second-opt', 'bg-warning');
+
+
+
+
 document.getElementById('first-opt').addEventListener('click', () => c.send(message(MessageType.CLICK_LEFT, participantId)));
 document.getElementById('second-opt').addEventListener('click', () => c.send(message(MessageType.CLICK_RIGHT, participantId)));
 

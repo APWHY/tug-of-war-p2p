@@ -1,5 +1,5 @@
 body {
-    background-color: #b3d9db;
+    background-color: var(--light);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -15,8 +15,8 @@ body {
 }
 
 .expand {
-    height: 80vmin;
-    width: 50%;
+    height: 100%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -27,6 +27,8 @@ body {
     overflow: wrap;
     white-space: initial;
     word-break: break-all;
+    pointer-events: none;
+    user-select: none;
 }
 
 @media (min-width: 600px) and (max-width: 1600px) {
@@ -43,6 +45,41 @@ body {
 
 .table th {
     border-top: none
+}
+
+.no-zoom {
+    touch-action: manipulation;
+}
+
+.ripple-btn {
+    overflow: hidden;
+    position: absolute;
+    pointer-events: none;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.ripple {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    border-radius: 50%;
+    animation: ripples 1s linear;
+}
+
+@keyframes ripples {
+    0% {
+        width: 10vh;
+        height: 10vh;
+        opacity: 0.3;
+    }
+    100% {
+        width: 500vh;
+        height: 500vh;
+        opacity: 0;
+    }
 }
 
 #timer {

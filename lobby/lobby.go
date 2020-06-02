@@ -110,6 +110,7 @@ func (l *Lobby) lobbyWatcher() {
 		for _, p := range l.Participants {
 			p.sender(recv)
 		}
+		l.sender(recv)
 
 	}
 }
@@ -118,7 +119,7 @@ func (l *Lobby) lobbyWatcher() {
 func (l *Lobby) clickersWatcher() {
 	for {
 		recv := <-l.clickerPipe
-		participantName, ok := l.Participants[recv.Value]
+		participantName, ok := l.Participants[recv.Value.(string)]
 		if ok {
 			recv.Value = participantName.Name
 			l.sender(recv)
