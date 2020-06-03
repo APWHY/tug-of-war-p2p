@@ -5,9 +5,9 @@ class Marker {
         this.elem = document.getElementById(elementId);
         this.px = 50;
         this.target = 50;
-        this.speed = 0.05;
-        this.decay = 0.85
-        this.threshold = 150;//150;
+        this.speed = 0.05; // how fast the marker moves
+        this.decay = 0.97; // the rate at which the threshold will decay
+        this.threshold = 150; // initial required margin of victory
         this.count = { ...EMPTY_COUNT }
         this.running = false;
         this.startAnimation = this.startAnimation.bind(this);
@@ -23,7 +23,7 @@ class Marker {
         console.log("START")
         this.running = true;
         this.animationInterval = setInterval(this.animateMarker, 10);
-        this.thresholdInterval = setInterval(this.updateThreshold, 1000);
+        this.thresholdInterval = setInterval(this.updateThreshold, 100);
     }
 
     animateMarker() {
