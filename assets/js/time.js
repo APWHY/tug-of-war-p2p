@@ -11,26 +11,44 @@ export function addSeconds(inc_amt) {
     return dt.setTime(dt.getTime() + inc_amt * 1000);
 }
 
-
-// start a countdown timer to inputted time (looks for an element with id="timer") and runs a handler when it finishes
 export function startTimer(length, on_finish) {
-    console.log("start timer")
-    let timer = length - 1 // we need to count from length - 1 because of fencepost
-    document.getElementById("timer").innerHTML = timer;
-    let x = setInterval(() => {
-        if (timer === 0) {
-            clearInterval(x);
-            if (on_finish) on_finish();
-            return;
+    console.log('ping');
+
+    let timerBgs = document.getElementsByClassName('timer-bg');
+    let timers = document.getElementsByClassName('timer-val');
+    let timerSlider = document.getElementById('timer-top');
+    let finish = addSeconds(length);
+
+    [...timerBgs].forEach(bgDiv => {
+        bgDiv.style.opacity = 1;
+        bgDiv.style.pointerEvents = 'auto'
+    })
+
+    function step() {
+        let timeLeft = secondsDiff(new Date(), finish);
+        if (timeLeft < 1) {
+            [...timerBgs].forEach(bgDiv => {
+                bgDiv.style.opacity = 0;
+            })
         }
-        timer--;
-        document.getElementById("timer").innerHTML = timer;
-
-
-    }, 1000);
-
-    return x;
+        if (timeLeft > 0) {
+            [...timers].forEach((timer) => {
+                timer.innerHTML = Math.floor(timeLeft);
+            })
+            timerSlider.style.height = `${100 * (1 - (timeLeft / length))}%`
+            window.requestAnimationFrame(step)
+        } else {
+            if (on_finish) on_finish();
+            [...timerBgs].forEach(bgDiv => {
+                bgDiv.style.pointerEvents = 'none'
+            })
+        }
+    }
+    window.requestAnimationFrame(step)
 }
+
+
+
 
 // stop a timer when given the interval looping it
 export function stopTimer(interval) {

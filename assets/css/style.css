@@ -43,8 +43,50 @@ body {
     }
 }
 
+.table {
+    table-layout: fixed;
+}
+
 .table th {
-    border-top: none
+    border-top: none;
+}
+
+.table td {
+    white-space: nowrap;
+    overflow: hidden;
+    transition: background-color 1s ease-in;
+}
+
+.table td div {
+    display: inline-block;
+    transition: color 1s ease-in;
+}
+
+.timer-bg {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
+    pointer-events: none;
+}
+
+#timer-bottom {
+    bottom: 0;
+}
+
+#timer-top {
+    top: 0;
+    height: 0%;
+}
+
+.timer-val {
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    user-select: none;
 }
 
 .no-zoom {

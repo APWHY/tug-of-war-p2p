@@ -1,6 +1,5 @@
 import { message, MessageType, messageIsValid } from './message.js'
-import { startTimer, stopTimer } from './time.js'
-
+import { startTimer } from './time.js'
 // getting values passed through by the html template
 let lobbyId = _lobbyId;
 let participantId = _participantId;
@@ -55,10 +54,6 @@ function makeRippleGenerator(buttonId, buttonColorClass) {
 
 makeRippleGenerator('first-opt', 'bg-info');
 makeRippleGenerator('second-opt', 'bg-warning');
-
-
-
-
 document.getElementById('first-opt').addEventListener('click', () => c.send(message(MessageType.CLICK_LEFT, participantId)));
 document.getElementById('second-opt').addEventListener('click', () => c.send(message(MessageType.CLICK_RIGHT, participantId)));
 

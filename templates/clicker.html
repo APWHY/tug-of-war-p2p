@@ -5,12 +5,12 @@
     var _participantId = {{ .participantId }}
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<div class="h-100 fill d-flex flex-column container-fluid">
+<div class="h-100 fill position-fixed d-flex flex-column container-fluid">
     <div class="row bg-secondary">
         <div class="col-sm-4 p-2 d-flex bg-dark align-items-center">
             <p class="text-light m-0 lead">Name: {{ .name }}</p>
         </div>
-        <div id="blah" class="col-sm-8 p-2 d-flex align-items-center">
+        <div class="col-sm-8 p-2 d-flex align-items-center">
             <p class="text-light m-0 lead">{{ .question }}</p>
         </div>
 
@@ -34,7 +34,16 @@
         <h1 class="text-light">The round has finished. Please look at the lobby screen to see the results.</h1>
     </div>
 
+
+    <div id="timer-bottom" class="timer-bg bg-secondary position-absolute row">
+        <h1 class="timer-val display-1 text-dark">4</h1>
+    </div>
+    <div id="timer-top" class="timer-bg bg-dark position-absolute row">
+        <h1 class="timer-val display-1 text-light">4</h1>
+    </div>
+
 </div>
+
 
 
 
