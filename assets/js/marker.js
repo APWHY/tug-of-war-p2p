@@ -6,8 +6,8 @@ class Marker {
         this.px = 50;
         this.target = 50;
         this.speed = 0.05; // how fast the marker moves
-        this.decay = 0.97; // the rate at which the threshold will decay
-        this.threshold = 150; // initial required margin of victory
+        this.decay = 0.985; // the rate at which the threshold will decay
+        this.threshold = 250; // initial required margin of victory
         this.count = { ...EMPTY_COUNT }
         this.running = false;
         this.startAnimation = this.startAnimation.bind(this);

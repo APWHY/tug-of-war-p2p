@@ -1,5 +1,5 @@
 import { message, MessageType, messageIsValid, EMPTY_COUNT } from './message.js'
-import { addSeconds, startTimer, START_TIMER_LENGTH } from './time.js'
+import { startTimer, START_TIMER_LENGTH } from './time.js'
 import Marker from './marker.js'
 
 let DEFAULT_ACCELERATION = -0.4; // how quickly the text will head back to its original position

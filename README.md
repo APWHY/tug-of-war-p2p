@@ -1,23 +1,16 @@
-tug of war web app.
+# Tug of war DV App
 
-Success! Created client at C:\Users\Tom\Work\tug-of-war\client
-Inside that directory, you can run several commands:
+A small webapp that helps with democratic decision making
 
-  ```npm start```
-    Starts the development server.
+## Installation
 
- ``` npm run build```
-    Bundles the app into static files for production.
+You should be good to go by simply running:
 
- ``` npm test```
-    Starts the test runner.
-
- ``` npm run eject```
-    Removes this tool and copies build dependencies, configuration files
-    and scripts into the app directory. If you do this, you can’t go back!
-
-We suggest that you begin by typing:
+```bash
+   go build ./application.go
+   ./application.go
 ```
-  cd client
-  npm start
-  ```
+
+## Deployment
+
+The app is deployed on AWS' Elastic Beanstalk, so if this is your first time setting up you will first have to run `eb init`. However, once done, changes can be deployed by simply running `eb deploy`.

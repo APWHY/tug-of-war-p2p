@@ -26,7 +26,7 @@ export function startTimer(length, on_finish) {
 
     function step() {
         let timeLeft = secondsDiff(new Date(), finish);
-        if (timeLeft < 1) {
+        if (timeLeft < 0.3) {
             [...timerBgs].forEach(bgDiv => {
                 bgDiv.style.opacity = 0;
             })
