@@ -14,3 +14,7 @@ You should be good to go by simply running:
 ## Deployment
 
 The app is deployed on AWS' Elastic Beanstalk, so if this is your first time setting up you will first have to run `eb init`. However, once done, changes can be deployed by simply running `eb deploy`.
+
+## Game balance
+
+For now, the pace of the game can be adjusted by changing the values of `this.decay` and `this.threshold` in `assets/js/marker.js`.
