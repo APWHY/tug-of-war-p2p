@@ -5,16 +5,22 @@ let lobbyId = _lobbyId;
 let participantId = _participantId;
 
 let url = `ws://${window.location.host}/ws?lobbyId=${lobbyId}&participantId=${participantId}`;
+let cWasOpened = false;
 let c = new WebSocket(url);
 c.onopen = function (event) {
+    cWasOpened = true;
     c.send(message(MessageType.NEW_USER, participantId))
 };
+c.onerror = () => {
+    alert(cWasOpened ? "Connection to lobby unexpectedly closed." : "Websocket connection to lobby could not be established. If this issue persists, it is likely that your device is not passing the correct headers to open a websocket connection. Please inform the lobby leader with your browser's version and type.");
+};
+c.onclose = () => {
+    alert("Connection to lobby unexpectedly closed. This usually happens if the lobby has been open for over an hour.");
+}
 
 let timerInterval = undefined;
 c.onmessage = function (msg) {
-    console.log(JSON.parse(msg.data));
     let parsed = JSON.parse(msg.data);
-    console.log(parsed, messageIsValid(parsed));
     if (messageIsValid(parsed)) {
         switch (parsed.type) {
             case MessageType.START:
@@ -46,7 +52,6 @@ function makeRippleGenerator(buttonId, buttonColorClass) {
         rippler.classList.add(buttonColorClass);
         rippler.style.left = `${x}px`;
         rippler.style.top = `${y}px`;
-        console.log(evt)
         rippleCanvas.appendChild(rippler);
         rippler.addEventListener('animationend', rippler.remove)
     })

@@ -20,7 +20,6 @@ class Marker {
     }
 
     startAnimation() {
-        console.log("START")
         this.running = true;
         this.animationInterval = setInterval(this.animateMarker, 10);
         this.thresholdInterval = setInterval(this.updateThreshold, 100);
@@ -32,7 +31,6 @@ class Marker {
         if (this.px < 0) this.px = 0;
         this.elem.style.left = `calc( ${this.px}% - 10px)`;
         if (this.px === 100 || this.px === 0) {
-            console.log(this.handleStop)
             this.handleStop()
         }
     }
@@ -55,7 +53,6 @@ class Marker {
     forceEnd() {
         clearInterval(this.animationInterval);
         clearInterval(this.thresholdInterval);
-        console.log("STOP")
         this.running = false;
 
     }

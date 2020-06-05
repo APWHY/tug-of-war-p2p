@@ -12,7 +12,6 @@ export function addSeconds(inc_amt) {
 }
 
 export function startTimer(length, on_finish) {
-    console.log('ping');
 
     let timerBgs = document.getElementsByClassName('timer-bg');
     let timers = document.getElementsByClassName('timer-val');

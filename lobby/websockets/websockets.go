@@ -40,7 +40,7 @@ type Message struct {
 type MessageSender func(*Message)
 
 // WsHandlerGen returns a connection that will allow us to send messages as well as running a goroutine that pipes recieved messages into the specified channel
-func WsHandlerGen(w http.ResponseWriter, r *http.Request, channel chan *Message) (MessageSender, bool) {
+func WsHandlerGen(w http.ResponseWriter, r *http.Request, channel chan *Message, stopCh chan struct{}) (MessageSender, bool) {
 	conn, err := wsupgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Printf("Failed to set websocket upgrade: %+v", err)
@@ -49,15 +49,22 @@ func WsHandlerGen(w http.ResponseWriter, r *http.Request, channel chan *Message)
 	// listen for messages and pass them into channel
 	go func() {
 		for {
+
 			_, msg, err := conn.ReadMessage()
 			log.Printf("recieved message %s", msg)
 			if err != nil {
 				log.Printf("Socket connection terminated due to err: %s", err)
 				break
 			}
-			msgInt, ok := msgUnmarshal(msg)
+			msgUnmarshalled, ok := msgUnmarshal(msg)
 			if ok {
-				channel <- msgInt
+				select {
+				case <-stopCh:
+					conn.Close()
+					return
+				default:
+					channel <- msgUnmarshalled
+				}
 			}
 		}
 	}()
@@ -70,6 +77,9 @@ func senderGenerator(c *websocket.Conn) MessageSender {
 		c.WriteMessage(websocket.TextMessage, msgMarshal(msg))
 	}
 }
+
+// DummySender is a placeholder for a Participant/Lobby that does not have a MessageSender function yet
+func DummySender(_ *Message) {}
 
 func msgUnmarshal(msg []byte) (*Message, bool) {
 

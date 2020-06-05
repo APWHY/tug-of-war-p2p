@@ -1,16 +1,21 @@
 package main
 
 import (
-	"log"
 	"net/http"
+	"time"
 
 	petname "github.com/dustinkirkland/golang-petname"
 	"github.com/gin-gonic/gin"
+	uuid "github.com/satori/go.uuid"
 
 	"gitlab.bcgdv.io/syd/tug-of-war/lobby"
 )
 
 var lobbies = map[string]*lobby.Lobby{}
+
+func deleteLobby(ID uuid.UUID) {
+	delete(lobbies, ID.String())
+}
 
 func main() {
 	// Set the router as the default one shipped with Gin
@@ -46,10 +51,9 @@ func main() {
 				},
 			)
 		} else {
-			log.Println("making new lobby")
-
-			newLobby := lobby.CreateLobby(question, firstOption, secondOption)
+			newLobby := lobby.CreateLobby(question, firstOption, secondOption, deleteLobby)
 			lobbies[newLobby.ID.String()] = newLobby
+			time.AfterFunc(time.Hour, newLobby.DeleteLobby)
 			c.HTML(
 				http.StatusOK,
 				"lobby.html",
@@ -103,26 +107,8 @@ func main() {
 			if participantID == "" {
 				foundLobby.MakeLobbyWsHandler(c.Writer, c.Request)
 			} else {
-				if !foundLobby.MakeParticipantWsHandler(c.Writer, c.Request, participantID) {
-					c.HTML(
-						http.StatusOK,
-						"index.html",
-						gin.H{
-							"title": "Home Page",
-							"err":   "invalid participant id (from clicker)",
-						},
-					)
-				}
+				foundLobby.MakeParticipantWsHandler(c.Writer, c.Request, participantID)
 			}
-		} else {
-			c.HTML(
-				http.StatusOK,
-				"index.html",
-				gin.H{
-					"title": "Home Page",
-					"err":   "invalid lobby id (from clicker)",
-				},
-			)
 		}
 	})
 

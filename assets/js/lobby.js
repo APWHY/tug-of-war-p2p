@@ -25,6 +25,9 @@ let clicker_counts = {};
 let name_trackers = new Map();
 let trackerInterval = setInterval(updateNamePositions, 10);
 let marker = new Marker('tug-marker', () => handleStop());
+c.onclose = () => {
+    alert("The lobby has already been closed by the server. This can happen if the lobby has been open for over an hour.")
+}
 c.onmessage = function (msg) {
     let parsed = JSON.parse(msg.data);
     if (messageIsValid(parsed)) {

@@ -151,3 +151,7 @@ body {
     position: relative;
     left: calc(50% - 10px)
 }
+
+#player-list-default {
+    white-space: normal;
+}
