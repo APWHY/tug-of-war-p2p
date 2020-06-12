@@ -1,0 +1,140 @@
+<!--lobby.html-->
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!--Use the title variable to set the title of the page-->
+    <title>{{ .title }}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- include PeerJS -->
+    <script src="https://unpkg.com/peerjs@1.2.0/dist/peerjs.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container justify-content-between">
+            <span class="px-3 navbar-brand">DV Tug Of War</span>
+
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+
+    <script>
+        var _lobbyId = {{ .lobbyId }};
+        var _firstOpt = {{ .firstOpt }};
+        var _secondOpt = {{ .secondOpt }};
+        var _qrCodeUrl = "http://" + window.location.host + {{ printf "/clicker/?lobbyId=%s" .lobbyId }};
+    </script>
+    <script type="text/javascript" src="static/js/qrcode.min.js"></script>
+    <div class="bg-light py-3 flex-grow-1 fill">
+        <div class="container">
+            <div class="container">
+                <h1 class="display-4">Welcome! </h1>
+                <p class="lead">Question: {{ .question }}</p>
+                <h2 class=" display-4 text-danger lead d-flex justify-content-between"><span
+                        class="badge badge-info">{{ .firstOpt }}</span> vs. <span
+                        class="badge badge-warning">{{ .secondOpt }}</span></h2>
+
+                <hr class="my-4">
+                <div class="row before">
+                    <div class="col-8">
+                        <a id="qrcode-link">
+                            <div id="qrcode" class="p-3 d-flex justify-content-center"></div>
+                        </a>
+                        <p>This lobby has yet to start. Join the lobby by scanning the QR-Code with your phone.</p>
+                        <p>You can start the lobby by pressing the start button below.</p>
+                        <p>The lobby will end when the stop button is pressed or the marker exits the pink rectangle it
+                            is
+                            enclosed
+                            within
+                        </p>
+                        <p>The marker will become more volatile the longer the lobby is running, so make sure you keep
+                            tapping!</p>
+
+                    </div>
+                    <div class="col-4">
+                        <table class="table">
+                            <thead class="">
+                                <tr>
+                                    <th scope="col ">Participants</th>
+                                </tr>
+                            </thead>
+                            <tbody id="player-list">
+                                <tr id="player-list-empty">
+                                    <td id="player-list-default">
+                                        <p> There doesn't seem to be anyone in here yet :(</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+
+
+
+                </div>
+
+                <div class="during">
+
+                    <div id="tug-outside">
+                        <div id="tug-inside">
+                            <div id="tug-marker"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="after">
+                    <p id="winner"></p>
+                    <table id="scoreboard" class="table">
+                    </table>
+
+                </div>
+                <p class="lead">
+                    <a class="btn btn-primary btn-lg before" href="#" id="start-btn" role="button">Start</a>
+                    <a class="btn btn-danger btn-lg during" href="#" id="stop-btn" role="button">Stop</a>
+                </p>
+            </div>
+        </div>
+        <div id="timer-bottom" class="timer-bg bg-secondary position-absolute row">
+            <h1 class="timer-val display-1 text-dark">4</h1>
+        </div>
+        <div id="timer-top" class="timer-bg bg-light position-absolute row">
+            <h1 class="timer-val display-1 text-dark">4</h1>
+        </div>
+    </div>
+
+
+    <script type="module" src="static/js/lobby.js"></script>
+    <script type="text/javascript">
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            width: 200,
+            height: 200
+        });
+
+        qrcode.makeCode(_qrCodeUrl);
+        document.getElementById("qrcode-link").setAttribute("href", _qrCodeUrl);
+
+    </script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

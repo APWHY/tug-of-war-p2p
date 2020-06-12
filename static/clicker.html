@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!--Use the title variable to set the title of the page-->
+    <title>{{ .title }}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- include PeerJS -->
+    <script src="https://unpkg.com/peerjs@1.2.0/dist/peerjs.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+
+<body>
+    <script>
+        var _lobbyId = {{ .id }}
+        var _participantId = {{ .participantId }}
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <div class="h-100 fill position-fixed d-flex flex-column container-fluid">
+        <div class="row bg-secondary">
+            <div class="col-sm-4 p-2 d-flex bg-dark align-items-center">
+                <p class="text-light m-0 lead">Name: {{ .name }}</p>
+            </div>
+            <div class="col-sm-8 p-2 d-flex align-items-center">
+                <p class="text-light m-0 lead">{{ .question }}</p>
+            </div>
+
+
+        </div>
+        <div id="before-finish" class="row fill position-relative">
+            <div class="p-0 col-sm-6">
+                <div class="bg-dark expand no-zoom" id="first-opt">
+                    <p class="clicker-text display-4 text-info">{{ .firstOpt }}</p>
+                </div>
+            </div>
+            <div class="p-0 col-sm-6">
+                <div class="bg-dark expand no-zoom" id="second-opt">
+                    <p class="clicker-text display-4 text-warning">{{ .secondOpt }}</p>
+                </div>
+            </div>
+            <div id="all-ripples" class="ripple-btn"></div>
+
+        </div>
+        <div id="after-finish" class="row bg-dark fill p-2" hidden>
+            <h1 class="text-light">The round has finished. Please look at the lobby screen to see the results.</h1>
+        </div>
+
+
+        <div id="timer-bottom" class="timer-bg bg-secondary position-absolute row">
+            <h1 class="timer-val display-1 text-dark">4</h1>
+        </div>
+        <div id="timer-top" class="timer-bg bg-dark position-absolute row">
+            <h1 class="timer-val display-1 text-light">4</h1>
+        </div>
+
+    </div>
+
+
+
+
+    <script type="module" src="static/js/clicker.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
