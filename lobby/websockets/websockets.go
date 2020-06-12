@@ -15,7 +15,7 @@ var wsupgrader = websocket.Upgrader{
 
 type messageType int
 
-// this should be matched up to the MessageType constant in assets/js/message.js
+// this should be matched up to the MessageType constant in static/js/message.js
 const (
 	// Start starts the game
 	Start messageType = iota

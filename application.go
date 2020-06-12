@@ -22,7 +22,7 @@ func main() {
 	router := gin.Default()
 	petname.NonDeterministicMode()
 	router.LoadHTMLGlob("templates/*")
-	router.Static("/assets", "./assets")
+	router.Static("/static", "./static")
 
 	router.GET("/", func(c *gin.Context) {
 		c.HTML(
@@ -53,7 +53,7 @@ func main() {
 		} else {
 			newLobby := lobby.CreateLobby(question, firstOption, secondOption, deleteLobby)
 			lobbies[newLobby.ID.String()] = newLobby
-			time.AfterFunc(time.Hour, newLobby.DeleteLobby)
+			time.AfterFunc(time.Hour, newLobby.DeleteLobby) // delete lobbies that have existed for an hour
 			c.HTML(
 				http.StatusOK,
 				"lobby.html",

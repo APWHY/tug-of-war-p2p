@@ -17,4 +17,4 @@ The app is deployed on AWS' Elastic Beanstalk, so if this is your first time set
 
 ## Game balance
 
-For now, the pace of the game can be adjusted by changing the values of `this.decay` and `this.threshold` in `assets/js/marker.js`.
+For now, the pace of the game can be adjusted by changing the values of `this.decay` and `this.threshold` in `static/js/marker.js`.
