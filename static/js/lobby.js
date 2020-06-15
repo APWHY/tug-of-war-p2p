@@ -10,24 +10,64 @@ const ORIGIN = {
     vx: 0,
 }
 
-// getting values passed through by the html template
-let lobbyId = _lobbyId;
-let firstOpt = _firstOpt;
-let secondOpt = _secondOpt;
+// getting values passed through by the html query string
 
+let params = new URLSearchParams(location.search)
+let lobbyId = null
+let question = params.get("question")
+let firstOpt = params.get("first-opt");
+let secondOpt = params.get("second-opt");
+
+let displayedError = ""
 
 // setting up websocket connection
 let url = `ws://${window.location.host}/ws?lobbyId=${lobbyId}`;
-let c = new WebSocket(url);
+
+var peer = new Peer();
+
+peer.on('open', function (id) {
+    // Workaround for peer.reconnect deleting previous id
+    if (peer.id === null) {
+        console.log('Received null id from peer open');
+        displayedError = 'Received null id from peer open'
+        peer.id = lobbyId
+    } else {
+        lobbyId = peer.id;
+    }
+
+    console.log('ID: ' + lobbyId);
+    generateQRCode(lobbyId);
+
+
+});
+
+
+peer.on('connection', (c) => {
+    c.on('close', () => {
+        console.log('clicker closed connection')
+    });
+    // Receive messages
+    conn.on('data', function (data) {
+        console.log('Received', data);
+    });
+
+    // Send messages
+    conn.send('Hello!');
+
+})
+
+peer.on('close', () => {
+    console.log("The lobby has already been closed by the server. This can happen if the lobby has been open for over an hour.")
+    // alert("The lobby has already been closed by the server. This can happen if the lobby has been open for over an hour.")
+})
 
 // handling clicker presses coming in
 let clicker_counts = {};
 let name_trackers = new Map();
 let trackerInterval = setInterval(updateNamePositions, 10);
 let marker = new Marker('tug-marker', () => handleStop());
-c.onclose = () => {
-    alert("The lobby has already been closed by the server. This can happen if the lobby has been open for over an hour.")
-}
+let c = new WebSocket(url);
+
 c.onmessage = function (msg) {
     let parsed = JSON.parse(msg.data);
     if (messageIsValid(parsed)) {
@@ -91,6 +131,10 @@ setHidden(document.getElementsByClassName('before'), false)
 // we set the start time to be 5 seconds, but in reality we need to add one extra because a countdown from 5 actually takes 6 seconds to execute
 document.getElementById('start-btn').addEventListener('click', handleStart);
 document.getElementById('stop-btn').addEventListener('click', handleStop);
+document.getElementById('error-holder').innerHTML = displayedError;
+document.getElementById('question').innerHTML = question;
+document.getElementById('first-opt').innerHTML = firstOpt;
+document.getElementById('second-opt').innerHTML = secondOpt;
 
 // generate the leaderboard table and the winner text
 function generateScoreboard() {
@@ -163,4 +207,17 @@ function updateNamePositions() {
         }
         v.elem.style.paddingLeft = `${v.x}px`
     })
+}
+
+function generateQRCode(id) {
+    let qrCodeUrl = `http://${window.location.host}/static/clicker.html/?lobbyId=${id}`
+    document.getElementById("qrcode").innerHTML = ''
+    var qrcode = new QRCode(document.getElementById("qrcode"), {
+        width: 200,
+        height: 200
+    });
+
+    qrcode.makeCode(qrCodeUrl);
+    document.getElementById("qrcode-link").setAttribute("href", qrCodeUrl);
+
 }

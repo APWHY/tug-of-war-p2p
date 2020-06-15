@@ -1,15 +1,16 @@
 <!--lobby.html-->
-
 <!doctype html>
 <html lang="en">
 
 <head>
     <!--Use the title variable to set the title of the page-->
-    <title>{{ .title }}</title>
+    <title>Lobby</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- include PeerJS -->
     <script src="https://unpkg.com/peerjs@1.2.0/dist/peerjs.min.js"></script>
+    <!-- include QRCode Generator -->
+    <script type="text/javascript" src="js/qrcode.min.js"></script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -30,28 +31,24 @@
 
         </div>
     </nav>
-
-    <script>
-        var _lobbyId = {{ .lobbyId }};
-        var _firstOpt = {{ .firstOpt }};
-        var _secondOpt = {{ .secondOpt }};
-        var _qrCodeUrl = "http://" + window.location.host + {{ printf "/clicker/?lobbyId=%s" .lobbyId }};
-    </script>
-    <script type="text/javascript" src="js/qrcode.min.js"></script>
     <div class="bg-light py-3 flex-grow-1 fill">
         <div class="container">
             <div class="container">
+                <p class="text-danger" id="error-holder"></p>
                 <h1 class="display-4">Welcome! </h1>
-                <p class="lead">Question: {{ .question }}</p>
-                <h2 class=" display-4 text-danger lead d-flex justify-content-between"><span
-                        class="badge badge-info">{{ .firstOpt }}</span> vs. <span
-                        class="badge badge-warning">{{ .secondOpt }}</span></h2>
+                <p class="lead" id="question">Question: {{ .question }}</p>
+                <h2 class=" display-4 text-danger lead d-flex justify-content-between"><span class="badge badge-info"
+                        id="first-opt">{{ .firstOpt }}</span> vs. <span class="badge badge-warning"
+                        id="second-opt">{{ .secondOpt }}</span></h2>
 
                 <hr class="my-4">
                 <div class="row before">
                     <div class="col-8">
                         <a id="qrcode-link">
-                            <div id="qrcode" class="p-3 d-flex justify-content-center"></div>
+                            <div id="qrcode"
+                                class="p-3 d-flex justify-content-center align-items-center font-weight-light">
+                                Generating QR
+                                Code...</div>
                         </a>
                         <p>This lobby has yet to start. Join the lobby by scanning the QR-Code with your phone.</p>
                         <p>You can start the lobby by pressing the start button below.</p>
@@ -117,13 +114,6 @@
 
     <script type="module" src="js/lobby.js"></script>
     <script type="text/javascript">
-        var qrcode = new QRCode(document.getElementById("qrcode"), {
-            width: 200,
-            height: 200
-        });
-
-        qrcode.makeCode(_qrCodeUrl);
-        document.getElementById("qrcode-link").setAttribute("href", _qrCodeUrl);
 
     </script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

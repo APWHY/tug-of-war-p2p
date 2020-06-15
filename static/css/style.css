@@ -155,3 +155,8 @@ body {
 #player-list-default {
     white-space: normal;
 }
+
+#qrcode {
+    min-height: 200px;
+    min-width: 200px;
+}
