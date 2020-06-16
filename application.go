@@ -9,7 +9,7 @@ func main() {
 	// Set the router as the default one shipped with Gin
 	router := gin.Default()
 
-	router.Static("/static", "./static")
+	router.Static("/", "./static")
 
 	// Start and run the server
 	router.Run("192.168.0.24:5000")

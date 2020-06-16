@@ -23,6 +23,7 @@ peer.on('open', () => {
         document.getElementById('second-opt').addEventListener('click', () => c.send(message(MessageType.CLICK_RIGHT, participantId)));
     })
     c.on('error', (err) => {
+        alert('Something seems to have gone wrong. Check the console or attempt a page refresh.')
         console.log('error recieved:', err)
     });
     c.on('data', (msg) => {
@@ -53,6 +54,10 @@ peer.on('open', () => {
     });
 });
 
+peer.on('error', (err) => {
+    console.log('Error with peer:', err)
+    alert('There was an error with the peering service. Check the console or attempt a page refresh.')
+})
 
 makeRippleGenerator('first-opt', 'bg-info');
 makeRippleGenerator('second-opt', 'bg-warning');

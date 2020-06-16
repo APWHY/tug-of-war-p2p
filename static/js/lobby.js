@@ -21,9 +21,6 @@ let secondOpt = params.get("second-opt");
 
 let displayedError = ""
 
-
-var peer = new Peer();
-
 // handling clicker presses coming in
 let clicker_counts = {};
 let id_name_map = {};
@@ -31,7 +28,7 @@ let name_trackers = new Map();
 let trackerInterval = setInterval(updateNamePositions, 10);
 let marker = new Marker('tug-marker', () => handleStop());
 
-
+var peer = new Peer();
 peer.on('open', function (id) {
     // Workaround for peer.reconnect deleting previous id
     if (peer.id === null) {
@@ -47,7 +44,6 @@ peer.on('open', function (id) {
 
 
 });
-
 
 peer.on('connection', (c) => {
     c.on('close', () => {
@@ -108,18 +104,12 @@ peer.on('connection', (c) => {
             }
         }
     });
-
-    // Send messages
-    c.send('Hello!');
-
 })
 
-peer.on('close', () => {
-    console.log("The lobby has already been closed by the server. This can happen if the lobby has been open for over an hour.")
-    // alert("The lobby has already been closed by the server. This can happen if the lobby has been open for over an hour.")
+peer.on('error', (err) => {
+    console.log('Error with peer:', err)
+    alert('There was an error with the peering service. Check the console or attempt a page refresh.')
 })
-
-
 
 setHidden(document.getElementsByClassName('during'), true)
 setHidden(document.getElementsByClassName('after'), true)
@@ -217,7 +207,7 @@ function updateNamePositions() {
 }
 
 function generateQRCode(id) {
-    let qrCodeUrl = `http://${window.location.host}/static/clicker.html/?lobbyId=${id}`
+    let qrCodeUrl = `http://${window.location.host}/clicker.html/?lobbyId=${id}`
     document.getElementById("qrcode").innerHTML = ''
     var qrcode = new QRCode(document.getElementById("qrcode"), {
         width: 200,
