@@ -207,7 +207,7 @@ function updateNamePositions() {
 }
 
 function generateQRCode(id) {
-    let qrCodeUrl = `http://${window.location.host}/clicker.html/?lobbyId=${id}`
+    let qrCodeUrl = `http://${window.location.host}/clicker.html?lobbyId=${id}`
     document.getElementById("qrcode").innerHTML = ''
     var qrcode = new QRCode(document.getElementById("qrcode"), {
         width: 200,
