@@ -1,5 +1,6 @@
-import { message, MessageType, messageIsValid, EMPTY_COUNT } from './message.js'
+import { message, MessageType, messageIsValid, messageLobbyInfo, EMPTY_COUNT } from './message.js'
 import { startTimer, START_TIMER_LENGTH } from './time.js'
+import generateName from './names.js'
 import Marker from './marker.js'
 
 let DEFAULT_ACCELERATION = -0.4; // how quickly the text will head back to its original position
@@ -20,10 +21,16 @@ let secondOpt = params.get("second-opt");
 
 let displayedError = ""
 
-// setting up websocket connection
-let url = `ws://${window.location.host}/ws?lobbyId=${lobbyId}`;
 
 var peer = new Peer();
+
+// handling clicker presses coming in
+let clicker_counts = {};
+let id_name_map = {};
+let name_trackers = new Map();
+let trackerInterval = setInterval(updateNamePositions, 10);
+let marker = new Marker('tug-marker', () => handleStop());
+
 
 peer.on('open', function (id) {
     // Workaround for peer.reconnect deleting previous id
@@ -47,12 +54,63 @@ peer.on('connection', (c) => {
         console.log('clicker closed connection')
     });
     // Receive messages
-    conn.on('data', function (data) {
-        console.log('Received', data);
+    c.on('data', (msg) => {
+        console.log(msg)
+        let parsed = JSON.parse(msg);
+        if (messageIsValid(parsed)) {
+            switch (parsed.type) {
+                case MessageType.NEW_USER:
+                    id_name_map[parsed.value] = {
+                        'name': generateName(),
+                        'conn': c,
+                    };
+
+                    let playerList = document.getElementById("player-list");
+                    document.getElementById('player-list-empty').hidden = true;
+                    let row = playerList.insertRow();
+                    let cell = row.insertCell();
+                    let textWrapper = document.createElement("div");
+                    let text = document.createTextNode(id_name_map[parsed.value].name);
+                    textWrapper.appendChild(text)
+                    cell.appendChild(textWrapper);
+
+                    clicker_counts[parsed.value] = {
+                        ...EMPTY_COUNT,
+                        'name': id_name_map[parsed.value].name
+                    };
+                    name_trackers.set(parsed.value, {
+                        ...ORIGIN,
+                        elem: textWrapper,
+                        cell,
+                        max_x: cell.getBoundingClientRect().width - textWrapper.getBoundingClientRect().width - BOUNCE_PADDING
+                    })
+                    c.send(messageLobbyInfo(id_name_map[parsed.value].name, question, firstOpt, secondOpt))
+                    break;
+                case MessageType.CLICK_LEFT:
+                case MessageType.CLICK_RIGHT:
+                    if (marker.running) {
+                        marker.count[parsed.type]++;
+                        clicker_counts[parsed.value][parsed.type]++;
+                        marker.updateTarget();
+                    } else {
+                        let oldPos = name_trackers.get(parsed.value);
+                        oldPos.cell.style.backgroundColor = parsed.type === MessageType.CLICK_LEFT ? '#97d1da' : '#ffeaad';
+                        // oldPos.cell.style.color = parsed.type === MessageType.CLICK_LEFT ? 'var(--light)' : 'var(--dark)';
+
+                        name_trackers.set(parsed.value, {
+                            ...oldPos,
+                            vx: CLICK_VELOCITY
+                        });
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
     });
 
     // Send messages
-    conn.send('Hello!');
+    c.send('Hello!');
 
 })
 
@@ -61,68 +119,7 @@ peer.on('close', () => {
     // alert("The lobby has already been closed by the server. This can happen if the lobby has been open for over an hour.")
 })
 
-// handling clicker presses coming in
-let clicker_counts = {};
-let name_trackers = new Map();
-let trackerInterval = setInterval(updateNamePositions, 10);
-let marker = new Marker('tug-marker', () => handleStop());
-let c = new WebSocket(url);
 
-c.onmessage = function (msg) {
-    let parsed = JSON.parse(msg.data);
-    if (messageIsValid(parsed)) {
-        switch (parsed.type) {
-            case MessageType.NEW_USER:
-
-                let playerList = document.getElementById("player-list");
-                document.getElementById('player-list-empty').hidden = true;
-                let row = playerList.insertRow();
-                let cell = row.insertCell();
-                let textWrapper = document.createElement("div");
-                let text = document.createTextNode(parsed.value);
-                textWrapper.appendChild(text)
-                cell.appendChild(textWrapper);
-
-                clicker_counts[parsed.value] = {
-                    ...EMPTY_COUNT,
-                    'name': parsed.value
-                };
-                name_trackers.set(parsed.value, {
-                    ...ORIGIN,
-                    elem: textWrapper,
-                    cell,
-                    max_x: cell.getBoundingClientRect().width - textWrapper.getBoundingClientRect().width - BOUNCE_PADDING
-                })
-
-                break;
-            case MessageType.CLICK_LEFT:
-            case MessageType.CLICK_RIGHT:
-                if (marker.running) {
-                    marker.count[parsed.type]++;
-                    clicker_counts[parsed.value][parsed.type]++;
-                    marker.updateTarget();
-                } else {
-                    let oldPos = name_trackers.get(parsed.value);
-                    oldPos.cell.style.backgroundColor = parsed.type === MessageType.CLICK_LEFT ? '#97d1da' : '#ffeaad';
-                    // oldPos.cell.style.color = parsed.type === MessageType.CLICK_LEFT ? 'var(--light)' : 'var(--dark)';
-
-                    name_trackers.set(parsed.value, {
-                        ...oldPos,
-                        vx: CLICK_VELOCITY
-                    });
-                }
-                break;
-            case MessageType.START:
-                startTimer(parsed.value, marker.startAnimation);
-                clearInterval(trackerInterval)
-                setHidden(document.getElementsByClassName('before'), true);
-                setHidden(document.getElementsByClassName('during'), false);
-                break;
-            default:
-                break;
-        }
-    }
-}
 
 setHidden(document.getElementsByClassName('during'), true)
 setHidden(document.getElementsByClassName('after'), true)
@@ -179,18 +176,28 @@ function setHidden(elems, hidden) {
 
 // starts the tug of war game
 function handleStart() {
-    c.send(message(MessageType.START, START_TIMER_LENGTH))
+    startTimer(START_TIMER_LENGTH, marker.startAnimation);
+    clearInterval(trackerInterval)
+    setHidden(document.getElementsByClassName('before'), true);
+    setHidden(document.getElementsByClassName('during'), false);
+    sendAll(message(MessageType.START, START_TIMER_LENGTH))
 }
 
 // ends the tug of war game
 function handleStop() {
     marker.decay = 0
     marker.forceEnd();
-    c.send(message(MessageType.STOP, ''))
+    sendAll(message(MessageType.STOP, ''))
     generateScoreboard();
     setHidden(document.getElementsByClassName('during'), true)
     setHidden(document.getElementsByClassName('after'), false)
 }
+
+function sendAll(msg) {
+    Object.values(id_name_map).forEach(v => v.conn.send(msg));
+}
+
+
 
 // handles the names bouncing left and right
 function updateNamePositions() {

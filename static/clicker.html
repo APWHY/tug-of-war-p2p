@@ -21,10 +21,10 @@
     <div class="h-100 fill position-fixed d-flex flex-column container-fluid">
         <div class="row bg-secondary">
             <div class="col-sm-4 p-2 d-flex bg-dark align-items-center">
-                <p class="text-light m-0 lead">Name: {{ .name }}</p>
+                <p class="text-light m-0 lead" id="name-text">Loading...</p>
             </div>
             <div class="col-sm-8 p-2 d-flex align-items-center">
-                <p class="text-light m-0 lead">{{ .question }}</p>
+                <p class="text-light m-0 lead" id="question-text"></p>
             </div>
 
 
@@ -32,12 +32,12 @@
         <div id="before-finish" class="row fill position-relative">
             <div class="p-0 col-sm-6">
                 <div class="bg-dark expand no-zoom" id="first-opt">
-                    <p class="clicker-text display-4 text-info">{{ .firstOpt }}</p>
+                    <p class="clicker-text display-4 text-info" id="first-opt-text"></p>
                 </div>
             </div>
             <div class="p-0 col-sm-6">
                 <div class="bg-dark expand no-zoom" id="second-opt">
-                    <p class="clicker-text display-4 text-warning">{{ .secondOpt }}</p>
+                    <p class="clicker-text display-4 text-warning" id="second-opt-text"></p>
                 </div>
             </div>
             <div id="all-ripples" class="ripple-btn"></div>

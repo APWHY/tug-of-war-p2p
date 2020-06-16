@@ -7,6 +7,7 @@ export const MessageType = {
     CLICK_LEFT: 2,
     CLICK_RIGHT: 3,
     NEW_USER: 4,
+    LOBBY_INFO: 5,
 };
 Object.freeze(MessageType);
 
@@ -15,6 +16,11 @@ export const EMPTY_COUNT = {
     [MessageType.CLICK_RIGHT]: 0
 };
 Object.freeze(EMPTY_COUNT);
+
+export function messageLobbyInfo(name, question, firstOpt, secondOpt) {
+    return message(MessageType.LOBBY_INFO, { name, question, firstOpt, secondOpt })
+}
+
 
 export function message(type, value) {
     return JSON.stringify({ type, value })
