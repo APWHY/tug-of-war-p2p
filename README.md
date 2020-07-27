@@ -1,6 +1,6 @@
 # Tug of war DV App
 
-A small webapp that helps with democratic decision making
+A small webapp that helps with democratic decision making. P2P version enabled by [PeerJS](https://peerjs.com/) and their free peering server.
 
 ## Installation
 
@@ -11,7 +11,7 @@ You should be good to go by simply running:
    ./application.go
 ```
 
-This simply sets up a simple gin backend that will host the static html/jss/css files for you to access.
+This simply sets up a simple gin backend that will host the static html/jss/css files for you to access. The server is only required for development -- when deployed, this backend is not required.
 
 ## Deployment
 
